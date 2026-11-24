@@ -8,7 +8,7 @@ format, and API addresses are still open.
 
 
 
-\## 6. Example GAD replies — proposed field names
+## 6. Example GAD replies — proposed field names
 
 
 
@@ -16,7 +16,7 @@ Both replies refer to the same handover, TR-001, and the same USB, EV-001.
 
 
 
-\### When the transfer reaches the GAD inbox
+### When the transfer reaches the GAD inbox
 
 
 
@@ -24,11 +24,11 @@ Both replies refer to the same handover, TR-001, and the same USB, EV-001.
 
 {
 
-&#x20; "transferId": "TR-001",
+  "transferId": "TR-001",
 
-&#x20; "evidenceId": "EV-001",
+  "evidenceId": "EV-001",
 
-&#x20; "status": "AWAITING\_ACCEPTANCE"
+  "status": "AWAITING_ACCEPTANCE"
 
 }
 
@@ -36,7 +36,7 @@ Both replies refer to the same handover, TR-001, and the same USB, EV-001.
 
 
 
-\### When the officer accepts the USB
+### When the officer accepts the USB
 
 
 
@@ -44,15 +44,15 @@ Both replies refer to the same handover, TR-001, and the same USB, EV-001.
 
 {
 
-&#x20; "transferId": "TR-001",
+  "transferId": "TR-001",
 
-&#x20; "evidenceId": "EV-001",
+  "evidenceId": "EV-001",
 
-&#x20; "decision": "ACCEPTED",
+  "decision": "ACCEPTED",
 
-&#x20; "decidedAt": "2026-11-24T10:15:00+05:30",
+  "decidedAt": "2026-11-24T10:15:00+05:30",
 
-&#x20; "officerRef": "GAD-OFFICER-01"
+  "officerRef": "GAD-OFFICER-01"
 
 }
 
