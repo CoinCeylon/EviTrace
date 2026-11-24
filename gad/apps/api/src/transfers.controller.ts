@@ -28,7 +28,15 @@ export class TransfersController {
   async getIncomingTransfer(@Param('transferId') transferId: string) {
     const transfer = await this.prisma.incomingTransfer.findFirst({
       where: { transferId, status: 'AWAITING_ACCEPTANCE' },
-      select: { transferId: true, evidenceId: true, status: true },
+      select: {
+        transferId: true,
+        evidenceId: true,
+        status: true,
+        senderSignatureStatus: true,
+        cardanoRecordStatus: true,
+        attachedFilesStatus: true,
+        custodyHistoryStatus: true,
+      },
     });
 
     if (!transfer) {

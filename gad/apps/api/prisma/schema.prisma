@@ -19,10 +19,14 @@ enum TransferStatus {
 }
 
 model IncomingTransfer {
-  inspection PhysicalInspection?
-  transferId String              @id
-  evidenceId String
-  status     TransferStatus      @default(AWAITING_ACCEPTANCE)
+  senderSignatureStatus VerificationStatus  @default(PENDING)
+  cardanoRecordStatus   VerificationStatus  @default(PENDING)
+  attachedFilesStatus   VerificationStatus  @default(PENDING)
+  custodyHistoryStatus  VerificationStatus  @default(PENDING)
+  inspection            PhysicalInspection?
+  transferId            String              @id
+  evidenceId            String
+  status                TransferStatus      @default(AWAITING_ACCEPTANCE)
 }
 
 model PhysicalInspection {
@@ -32,4 +36,10 @@ model PhysicalInspection {
   sealNumber       String?
   discrepancy      String?
   updatedAt        DateTime         @updatedAt
+}
+
+enum VerificationStatus {
+  PENDING
+  PASSED
+  FAILED
 }
