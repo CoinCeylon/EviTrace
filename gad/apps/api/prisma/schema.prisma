@@ -19,7 +19,17 @@ enum TransferStatus {
 }
 
 model IncomingTransfer {
-  transferId String         @id
+  inspection PhysicalInspection?
+  transferId String              @id
   evidenceId String
-  status     TransferStatus @default(AWAITING_ACCEPTANCE)
+  status     TransferStatus      @default(AWAITING_ACCEPTANCE)
+}
+
+model PhysicalInspection {
+  transferId       String           @id
+  transfer         IncomingTransfer @relation(fields: [transferId], references: [transferId])
+  packageCondition String
+  sealNumber       String?
+  discrepancy      String?
+  updatedAt        DateTime         @updatedAt
 }
