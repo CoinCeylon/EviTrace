@@ -1,6 +1,43 @@
-node_modules
+# Node.js dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+coverage/
+
+# Environment variables
 .env
 .env.*
 !.env.example
+
+# Uploaded files
 uploads/*
-!uploads/ .gitkeep
+!uploads/.gitkeep
+
+# Blockchain private keys
+*.skey
+*.pem
+*.key
+secrets/
+private-keys/
+wallet-seeds/
+
+# Logs
+*.log
+logs/
+
+# Local database files
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+
