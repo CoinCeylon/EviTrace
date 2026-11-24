@@ -1,10 +1,12 @@
-﻿import {
+import {
   BadRequestException,
   Body,
   ConflictException,
   Controller,
   Get,
   HttpCode,
+  NotFoundException,
+  Param,
   Post,
 } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
@@ -20,6 +22,20 @@ export class TransfersController {
       select: { transferId: true, evidenceId: true, status: true },
       orderBy: { transferId: 'asc' },
     });
+  }
+
+  @Get('api/v1/transfers/incoming/:transferId')
+  async getIncomingTransfer(@Param('transferId') transferId: string) {
+    const transfer = await this.prisma.incomingTransfer.findFirst({
+      where: { transferId, status: 'AWAITING_ACCEPTANCE' },
+      select: { transferId: true, evidenceId: true, status: true },
+    });
+
+    if (!transfer) {
+      throw new NotFoundException('Transfer not found in the incoming inbox.');
+    }
+
+    return transfer;
   }
 
   @Post('integration/v1/transfers')
