@@ -36,6 +36,7 @@ export class TransfersController {
         cardanoRecordStatus: true,
         attachedFilesStatus: true,
         custodyHistoryStatus: true,
+        inspection: { select: { transferId: true } },
       },
     });
 
@@ -43,7 +44,23 @@ export class TransfersController {
       throw new NotFoundException('Transfer not found in the incoming inbox.');
     }
 
-    return transfer;
+    const { inspection, ...details } = transfer;
+    const checks = [
+      { name: 'Sender signature', status: details.senderSignatureStatus },
+      { name: 'Cardano record', status: details.cardanoRecordStatus },
+      { name: 'Attached files', status: details.attachedFilesStatus },
+      { name: 'Custody history', status: details.custodyHistoryStatus },
+    ];
+
+    const acceptanceBlockers = checks
+      .filter((check) => check.status !== 'PASSED')
+      .map((check) => `${check.name}: ${check.status}`);
+
+    if (!inspection) {
+      acceptanceBlockers.push('Physical inspection: not recorded');
+    }
+
+    return { ...details, acceptanceBlockers };
   }
 
   @Post('integration/v1/transfers')
