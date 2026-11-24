@@ -12,7 +12,7 @@ format, and API addresses are still open.
 
 
 
-Both replies refer to the same handover, TR-001, and the same USB, EV-001.
+These examples use handover TR-001 and evidence item EV-001. Acceptance and rejection are alternative outcomes.
 
 
 
@@ -66,3 +66,16 @@ GAD's signature before displaying “Accepted by GAD”. The teams still
 
 need to agree on the exact fields and signature format.
 
+### When the officer rejects the USB
+
+```json
+{
+  "transferId": "TR-001",
+  "evidenceId": "EV-001",
+  "decision": "REJECTED",
+  "decidedAt": "2026-11-24T10:15:00+05:30",
+  "officerRef": "GAD-OFFICER-01"
+}
+```
+
+Police B verifies GAD's signature before displaying “Rejected by GAD”.
