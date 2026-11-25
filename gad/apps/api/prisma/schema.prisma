@@ -19,14 +19,15 @@ enum TransferStatus {
 }
 
 model IncomingTransfer {
-  senderSignatureStatus VerificationStatus  @default(PENDING)
-  cardanoRecordStatus   VerificationStatus  @default(PENDING)
-  attachedFilesStatus   VerificationStatus  @default(PENDING)
-  custodyHistoryStatus  VerificationStatus  @default(PENDING)
+  expectedAttachments   ExpectedAttachment[]
+  senderSignatureStatus VerificationStatus   @default(PENDING)
+  cardanoRecordStatus   VerificationStatus   @default(PENDING)
+  attachedFilesStatus   VerificationStatus   @default(PENDING)
+  custodyHistoryStatus  VerificationStatus   @default(PENDING)
   inspection            PhysicalInspection?
-  transferId            String              @id
+  transferId            String               @id
   evidenceId            String
-  status                TransferStatus      @default(AWAITING_ACCEPTANCE)
+  status                TransferStatus       @default(AWAITING_ACCEPTANCE)
 }
 
 model PhysicalInspection {
@@ -42,4 +43,14 @@ enum VerificationStatus {
   PENDING
   PASSED
   FAILED
+}
+
+model ExpectedAttachment {
+  transferId       String
+  attachmentId     String
+  registeredSha256 String             @db.VarChar(64)
+  status           VerificationStatus @default(PENDING)
+  transfer         IncomingTransfer   @relation(fields: [transferId], references: [transferId])
+
+  @@id([transferId, attachmentId])
 }
