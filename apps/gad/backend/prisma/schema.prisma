@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TransferStatus {
+  AWAITING_ACCEPTANCE
+  ACCEPTED
+  REJECTED
+}
+
+model IncomingTransfer {
+  expectedAttachments   ExpectedAttachment[]
+  senderSignatureStatus VerificationStatus   @default(PENDING)
+  cardanoRecordStatus   VerificationStatus   @default(PENDING)
+  attachedFilesStatus   VerificationStatus   @default(PENDING)
+  custodyHistoryStatus  VerificationStatus   @default(PENDING)
+  inspection            PhysicalInspection?
+  transferId            String               @id
+  evidenceId            String
+  status                TransferStatus       @default(AWAITING_ACCEPTANCE)
+}
+
+model PhysicalInspection {
+  transferId       String           @id
+  transfer         IncomingTransfer @relation(fields: [transferId], references: [transferId])
+  packageCondition String
+  sealNumber       String?
+  discrepancy      String?
+  updatedAt        DateTime         @updatedAt
+}
+
+enum VerificationStatus {
+  PENDING
+  PASSED
+  FAILED
+}
+
+model ExpectedAttachment {
+  transferId       String
+  attachmentId     String
+  registeredSha256 String             @db.VarChar(64)
+  status           VerificationStatus @default(PENDING)
+  transfer         IncomingTransfer   @relation(fields: [transferId], references: [transferId])
+
+  @@id([transferId, attachmentId])
+}
