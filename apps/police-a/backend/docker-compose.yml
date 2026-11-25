@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: evitrace_police_a_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: police_a_user
+      POSTGRES_PASSWORD: police_a_pass
+      POSTGRES_DB: police_a_db
+    ports: 
+      - "5433:5432"
+    volumes:
+      - police_a_pgdata:/var/lib/postgresql/data
+
+volumes:
+  police_a_pgdata:

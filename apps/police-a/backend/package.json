@@ -1,0 +1,26 @@
+{
+	"name": "@evitrace/police-a-backend",
+	"version": "1.0.0",
+	"private": true,
+	"type": "module",
+	"main": "dist/server.js",
+	"scripts": {
+		"dev": "tsx watch --env-file=.env src/server.ts",
+		"build": "tsc",
+		"start": "node dist/server.js"
+	},
+	"devDependencies": {
+		"@types/cors": "^2.8.19",
+		"@types/express": "^5.0.6",
+		"@types/multer": "^2.3.0",
+		"@types/pg": "^8.23.1",
+		"tsx": "^4.23.15"
+	},
+	"dependencies": {
+		"cors": "^2.8.6",
+		"express": "^5.3.0",
+		"multer": "^2.5.0",
+		"pg": "^8.23.1"
+	},
+	"license": "Apache-2.0"
+}
