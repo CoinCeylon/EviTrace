@@ -1,5 +1,5 @@
 {
-  "name": "evitrace.json",
+  "name": "evitrace",
   "version": "1.0.0",
   "private": true,
   "description": "Privacy-Preserving Decentralized Legal Evidence Management Infrastructure",
@@ -9,9 +9,9 @@
     "test": "tests"
   },
   "workspaces": [
-	"apps/*/frontend",
-	"apps/*/backend",
-	"packages/*"
+    "apps/*/frontend",
+    "apps/*/backend",
+    "packages/*"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",

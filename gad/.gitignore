@@ -1,0 +1,9 @@
+﻿
+# Local dependencies and build output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Prisma Client is generated from the tracked schema
+/apps/api/src/generated/prisma/
