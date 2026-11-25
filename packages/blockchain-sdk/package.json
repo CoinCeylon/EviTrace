@@ -1,0 +1,17 @@
+{
+  "name": "@evitrace/blockchain-sdk",
+  "version": "1.0.0",
+  "description": "Shared blockchain integration SDK for EviTrace",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@meshsdk/core": "^1.9.1"
+  }
+}
