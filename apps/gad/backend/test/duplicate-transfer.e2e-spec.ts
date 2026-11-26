@@ -8,7 +8,6 @@ describe('Duplicate transfer submission', () => {
   let app: NestFastifyApplication;
   let prisma: PrismaService;
 
-  // Each test run gets its own transfer ID.
   const transferId = `TR-${randomUUID()}`;
   const evidenceId = 'EV-001';
 
@@ -52,6 +51,37 @@ describe('Duplicate transfer submission', () => {
       where: { transferId },
     });
     expect(count).toBe(1);
+  });
+
+  it('returns 409 and preserves the original evidence when a transfer ID is reused with different evidence', async () => {
+    const conflictTransferId = `TR-${randomUUID()}`;
+    const url = '/integration/v1/transfers';
+
+    try {
+      const original = await app.inject({
+        method: 'POST',
+        url,
+        payload: { transferId: conflictTransferId, evidenceId: 'EV-001' },
+      });
+      expect([200, 201]).toContain(original.statusCode);
+
+      const conflict = await app.inject({
+        method: 'POST',
+        url,
+        payload: { transferId: conflictTransferId, evidenceId: 'EV-999' },
+      });
+      expect(conflict.statusCode).toBe(409);
+
+      const rows = await prisma.incomingTransfer.findMany({
+        where: { transferId: conflictTransferId },
+        select: { evidenceId: true },
+      });
+      expect(rows).toEqual([{ evidenceId: 'EV-001' }]);
+    } finally {
+      await prisma.incomingTransfer.deleteMany({
+        where: { transferId: conflictTransferId },
+      });
+    }
   });
 
   afterAll(async () => {
