@@ -165,3 +165,56 @@ docker compose \
 ## License
 
 Apache-2.0
+
+## Current Development Status
+
+Last updated: 2026-11-27
+
+### Installed SDK Packages
+
+- Compact Runtime: 0.21.0
+- Compact JS: 3.0.2
+- Midnight JS: 5.0.1
+
+All three packages are installed successfully.
+
+### Known Technical Blockers
+
+#### Lace Wallet - DUST Registration
+
+- Network: Midnight Preprod (Ledger 9)
+- Lace Wallet: 2.5.2
+- Wallet funding: 5,000 tNIGHT received.
+- Error: ProtocolVersionMismatchError
+- Transaction preparation fails with both local
+  proof server and WASM proof generation.
+- Technical assistance requested from UniHack organizers.
+
+#### Ledger v9 - WebAssembly Compilation
+
+- Node.js: 22.23.5
+- Compact Runtime import: Passed.
+- Compact JS import: Failed.
+- Error: WebAssembly.Module() CompileError.
+- Midnight JS runtime import: Not yet verified.
+- Root cause remains unconfirmed.
+
+### Known Security Limitation
+
+- npm audit reports 8 moderate vulnerabilities.
+- Advisory: GHSA-chp3-j5qr-2vfr
+- Affected dependency: @effect/platform@0.96.3
+- Introduced through platform-js@3.0.0.
+- Forced SDK downgrade and dependency overrides
+  have been avoided to preserve compatibility.
+- Remediation is required before production deployment.
+
+### Development Decision
+
+Midnight environment configuration is temporarily
+paused pending technical guidance.
+
+This branch contains an incomplete development
+environment and is not ready for merging into main.
+
+Cardano development will continue independently.
