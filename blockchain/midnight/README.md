@@ -193,6 +193,7 @@ docker compose \
   start
 ```
 
+
 ## 7. Wallet Configuration
 
 ### Selected Wallet: 1AM Beta
@@ -213,8 +214,8 @@ Cardano and Midnight use separate blockchain addresses and
 authorization mechanisms, even when accessed through the same
 wallet application.
 
-Application-level wallet connectivity and transaction signing
-must be verified independently for both networks.
+Basic application-level wallet connectivity has been independently
+tested for both networks using the shared EviTrace Wallet SDK.
 
 ### Previous Lace Wallet Issue
 
@@ -225,7 +226,9 @@ Midnight Preprod.
 The issue persisted when using both the local proof server and
 WASM proof generation options.
 
-This issue remains unresolved in our testing.
+This issue remains unresolved in our testing but is no longer
+a blocker for EviTrace prototype development following the
+migration to 1AM Beta.
 
 ### 1AM Wallet RPC Issue and Resolution
 
@@ -248,32 +251,91 @@ After the team reported that the issue persisted in the initial
 beta build, the developers included the necessary fix and
 updated the build.
 
-The updated beta wallet was reported working during manual
-testing on November 27, 2026.
+Following the updated beta release, the following capabilities
+were verified during manual testing on November 27-28, 2026:
 
-Successful DUST registration confirmation, application-level
-wallet integration and end-to-end transaction verification
-must be documented through further testing.
+- Cardano DApp connectivity.
+- Cardano wallet address and balance retrieval.
+- Cardano transaction construction, signing and submission.
+- Midnight DApp connectivity.
+- Midnight Preprod network identification.
+- Midnight unshielded address retrieval.
+- NIGHT balance retrieval.
+- Non-zero DUST balance retrieval.
+- Midnight transaction history retrieval.
+- Midnight DApp-originated NIGHT transfer.
+
+The availability of a non-zero DUST balance confirms that DUST
+became available following the wallet migration.
+
+The Midnight DApp-originated token transfer was displayed as
+CONFIRMED in the 1AM wallet interface.
+
+Independent transaction verification remains pending.
 
 ### Wallet Integration Strategy
 
-The shared `@evitrace/wallet-sdk` package will provide a
-wallet-independent integration layer for EviTrace applications.
+The shared `@evitrace/wallet-sdk` package provides a reusable
+wallet integration layer for EviTrace institutional applications.
 
-The intended interfaces include:
+The current implementation includes:
 
+- Shared wallet configuration.
 - Cardano wallet connectivity through CIP-30.
-- Midnight wallet connectivity through the DApp Connector API.
-- Wallet address retrieval.
-- Network validation.
-- Transaction signing and submission.
-- Wallet ownership verification.
-- Consistent wallet error handling.
+- Midnight wallet connectivity through DApp Connector API 4.0.0.
+- Cardano network identifier validation.
+- Midnight connector RDNS and API version validation.
+- Midnight Preprod connection validation.
+- Reusable Cardano and Midnight connection functions.
 
-1AM Beta is the preferred wallet for the prototype.
+The following functions have been implemented and verified
+in a browser environment:
 
-Compatibility with its Cardano and Midnight connector interfaces
-must be verified before completing the integration.
+- `connectCardanoWallet()`
+- `connectMidnightWallet()`
+
+Both functions were successfully tested using a temporary
+Vite application connected to 1AM Beta.
+
+The current implementation is intentionally configured for
+1AM Beta. Support for additional wallet providers may be
+introduced in future development stages.
+
+### Midnight Transaction Compatibility
+
+The tested 1AM Beta implementation returned transaction
+identifiers from `makeTransfer()` rather than the serialized
+transaction described by the DApp Connector API 4.0.0
+type declaration.
+
+The wallet interface subsequently displayed the transaction
+as CONFIRMED.
+
+This observed behavior indicates that the tested wallet
+implementation submitted the transaction during makeTransfer.
+
+Further compatibility review is required before implementing
+reusable Midnight transaction functions.
+
+Applications must avoid duplicate transaction submission.
+
+### Remaining Wallet Integration Tasks
+
+- Cryptographic wallet ownership verification.
+- Institutional identity binding.
+- Cardano Preprod-specific network verification.
+- Reusable transaction construction and submission functions.
+- Automated wallet integration testing.
+- Smart contract interaction.
+- Actual zero-knowledge proof generation.
+
+For implementation details, usage examples and transaction
+testing records, refer to the
+[Wallet SDK documentation](../../packages/wallet-sdk/README.md).
+
+The initial wallet integration was merged into the main
+development branch through Pull Request #13.
+
 
 ## 8. SDK Compatibility Resolution
 
@@ -300,6 +362,7 @@ Compatibility reference:
 
 https://docs.midnight.network/relnotes/support-matrix
 
+
 ## 9. Verified Results
 
 - [x] Docker WSL integration.
@@ -316,14 +379,28 @@ https://docs.midnight.network/relnotes/support-matrix
 - [x] Initial TypeScript typecheck.
 - [x] Initial TypeScript build.
 - [x] Updated 1AM Beta wallet manual testing.
-- [ ] Final validation following main branch synchronization.
-- [ ] DUST registration and balance confirmation.
-- [ ] 1AM Cardano DApp integration.
-- [ ] 1AM Midnight DApp integration.
+- [x] DUST balance availability confirmation.
+- [x] 1AM Cardano DApp connectivity.
+- [x] 1AM Midnight DApp connectivity.
+- [x] Midnight DApp Connector API integration.
+- [x] Shared wallet configuration.
+- [x] Reusable Cardano wallet connection function.
+- [x] Reusable Midnight wallet connection function.
+- [x] Wallet SDK TypeScript typecheck and build.
+- [x] Wallet SDK runtime import verification.
+- [x] Dual-network browser connectivity validation.
+- [x] Midnight DApp token transfer confirmation in wallet UI.
+- [x] Wallet SDK integration merged into main.
+- [ ] Final clean-install validation following main synchronization.
+- [ ] Independent verification of 1AM test transactions.
+- [ ] Midnight transaction API compatibility verification.
+- [ ] Cryptographic wallet ownership verification.
+- [ ] Automated wallet integration tests.
 - [ ] Compact contract compilation.
 - [ ] Zero-knowledge proof generation.
 - [ ] Midnight Preprod contract deployment.
 - [ ] End-to-end smart contract execution.
+
 
 ## 10. Security Requirements
 
@@ -333,62 +410,98 @@ https://docs.midnight.network/relnotes/support-matrix
 - Use testnet assets only.
 - Never commit wallet recovery phrases or private keys.
 - Never expose private API credentials.
+- Never log, persist or commit wallet session tokens.
+- Treat wallet-provided service URLs as potentially sensitive.
 - Review verbose logging before processing confidential data.
 - Do not use floating compiler or Docker image versions.
 - Do not use beta wallets for production assets.
 - Do not share wallet recovery information between team members.
+- Validate the intended blockchain network before signing.
+- Validate transaction recipients and amounts.
+- Prevent duplicate transaction submissions.
+- Treat injected wallet connector metadata as untrusted.
+- Verify wallet ownership cryptographically.
+- Enforce institutional authorization independently of wallet ownership.
+
+Cardano and Midnight wallet addresses must be bound to an
+authenticated institutional identity using independently
+verified cryptographic mechanisms.
+
+Access to a single wallet application does not automatically
+prove ownership of both blockchain addresses.
+
+Blockchain wallet ownership alone does not establish an
+officer's institutional role or permissions.
+
 
 ## 11. Known Limitations
 
 - Application-specific Compact contracts are not implemented.
 - Actual Compact contract compilation remains pending.
-- Midnight DApp Connector integration remains pending.
-- Cardano integration with 1AM remains pending verification.
 - Actual zero-knowledge proof generation remains untested.
-- End-to-end Preprod transaction verification remains pending.
-- Lace Wallet DUST registration remains unresolved.
+- Midnight smart contract deployment remains untested.
+- End-to-end smart contract execution remains pending.
+- Independent verification of 1AM test transactions remains pending.
+- Cardano Preprod-specific network validation requires further work.
+- Midnight makeTransfer API compatibility requires further review.
+- Cryptographic wallet ownership verification is not implemented.
+- Institutional identity binding is not implemented.
+- Automated wallet integration tests are not implemented.
+- Browser validation was performed using a temporary Vite application.
+- The selected 1AM wallet is a beta release.
+- Lace Wallet DUST registration remains unresolved but is no
+  longer a blocker for prototype development.
 - On-chain Runtime v4 versions 4.0.0 and 4.0.2 coexist
   in the dependency tree.
 - TypeScript build verification currently covers the initial
   workspace scaffold rather than application-specific contracts.
+- Final clean-install validation after wallet integration
+  remains pending.
 
-### Known Dependency Security Issues
-
-The previous Midnight workspace npm audit reported eight
-moderate vulnerabilities.
-
-- Advisory: GHSA-chp3-j5qr-2vfr.
-- Affected dependency: @effect/platform@0.96.3.
-- Introduced through platform-js@3.0.0.
-
-Forced SDK downgrades and dependency overrides have been
-avoided to preserve compatibility.
-
-Further security review and remediation are required before
-production deployment.
 
 ## 12. Development Status
 
-Last updated: 2026-11-27.
+Last updated: 2026-11-28.
 
 The initial Midnight development environment has been configured
 and SDK runtime imports have been verified.
 
-The environment setup is ready for final validation before
-merging into the main development branch.
+The environment configuration was merged into the main
+development branch through Pull Request #11.
+
+The shared EviTrace Wallet SDK has been extended to support
+both Cardano and Midnight through 1AM Beta.
+
+Basic dual-network wallet connectivity, wallet address retrieval,
+balance retrieval and DUST availability have been verified
+in a browser environment.
+
+The wallet integration was merged into the main development
+branch through Pull Request #13.
+
+The project is ready to proceed with application-specific
+smart contract development, subject to the remaining
+validation and security requirements.
 
 The next development stages are:
 
-1. Verify Cardano and Midnight DApp connectivity with 1AM.
-2. Implement reusable wallet integration functions.
-3. Implement and compile Compact smart contracts.
-4. Verify zero-knowledge proof generation.
-5. Test contract deployment and execution on Preprod.
-6. Integrate Midnight functionality into EviTrace applications.
-7. Perform integration and security testing.
+1. Finalize Midnight smart contract architecture.
+2. Define contract state, circuits and authorization rules.
+3. Implement and compile the Compact smart contract.
+4. Implement contract testing.
+5. Verify actual zero-knowledge proof generation.
+6. Deploy and test the contract on Midnight Preprod.
+7. Implement cryptographic wallet ownership verification.
+8. Implement institutional identity binding.
+9. Integrate Midnight functionality into EviTrace applications.
+10. Perform end-to-end integration and security testing.
 
-Wallet integration and smart contract development will be
-managed as separate development tasks.
+Cardano and Midnight smart contract implementations will be
+managed through separate feature branches and pull requests.
+
+Development environment validation does not establish
+smart contract correctness or production readiness.
+
 
 ## 13. Resources
 
