@@ -12,6 +12,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@meshsdk/core": "1.9.1"
+    "@meshsdk/core": "1.9.1",
+    "@midnight-ntwrk/dapp-connector-api": "4.0.0"
   }
 }
