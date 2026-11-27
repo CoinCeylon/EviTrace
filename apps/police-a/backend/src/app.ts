@@ -1,6 +1,7 @@
 import express, { type Request, type Response } from 'express';
 import cors from 'cors';
 import { query } from './config/db.js';
+import evidenceRoutes from './routes/evidenceRoutes.js';
 
 const app = express();
 
@@ -29,5 +30,7 @@ app.get('/api/health', async (_req: Request, res: Response) => {
 		res.status(500).json({ status: 'ERROR', dbConnected: false, error: message });
 	}
 });
+
+app.use('/api/evidence', evidenceRoutes);
 
 export default app;
