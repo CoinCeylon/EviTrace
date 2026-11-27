@@ -1,0 +1,12 @@
+services:
+  proof-server:
+    image: midnightntwrk/proof-server:9.0.2
+    container_name: evitrace-midnight-proof-server
+
+    ports:
+      - "127.0.0.1:6300:6300"
+
+    environment:
+      MIDNIGHT_PROOF_SERVER_VERBOSE: "true"
+
+    restart: "no"

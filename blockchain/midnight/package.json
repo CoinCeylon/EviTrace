@@ -1,0 +1,17 @@
+{
+  "name": "@evitrace/midnight",
+  "version": "1.0.0",
+  "description": "Midnight smart contract development and integration for EviTrace",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@midnight-ntwrk/compact-js": "3.0.0",
+    "@midnight-ntwrk/compact-runtime": "0.21.0",
+    "@midnight-ntwrk/midnight-js": "5.0.0"
+  }
+}
