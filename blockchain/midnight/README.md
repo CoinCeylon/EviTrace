@@ -218,3 +218,37 @@ This branch contains an incomplete development
 environment and is not ready for merging into main.
 
 Cardano development will continue independently.
+
+## SDK Compatibility Update - 2026-11-27
+
+The Ledger v9 WASM import error was resolved by aligning
+the SDK dependencies with the Ledger 9 compatibility matrix.
+
+### Verified SDK Versions
+
+- Node.js: 22.23.5
+- Compact Runtime: 0.21.0
+- Compact JS: 3.0.0
+- Midnight JS: 5.0.0
+- Ledger v9: 1.0.0
+
+### Verification Results
+
+- Ledger v9 runtime import: Passed
+- Compact Runtime import: Passed
+- Compact JS import: Passed
+- Midnight JS import: Passed
+- TypeScript typecheck: Passed
+- TypeScript build: Passed
+
+### Remaining Limitations
+
+- On-chain Runtime v4 versions 4.0.0 and 4.0.2
+  coexist in the dependency tree.
+- Lace Wallet DUST registration remains unresolved.
+- Eight moderate dependency vulnerabilities remain.
+- Compact contract execution, proof generation and
+  Preprod transactions have not yet been verified.
+
+Compatibility reference:
+https://docs.midnight.network/relnotes/support-matrix
