@@ -25,5 +25,8 @@ export function hashEventPayload(payload: Record<string, unknown>): string {
 
 export function signEventHash(eventHash: string): string {
 	const secret = process.env.SIGNING_SECRET || `dev-secret-${process.env.INSTITUTION_ID || 'POLICE_A'}`;
+	if (!secret) {
+		throw new Error('SIGNING_SECRET environment variable is required');
+	}
 	return crypto.createHmac('sha256', secret).update(eventHash).digest('hex');
 }
