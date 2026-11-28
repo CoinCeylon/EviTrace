@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: police_a_pass
       POSTGRES_DB: police_a_db
     ports: 
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
     volumes:
       - police_a_pgdata:/var/lib/postgresql/data
 
